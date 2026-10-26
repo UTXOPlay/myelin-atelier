@@ -1,0 +1,39 @@
+{
+  "name": "myelin-atelier",
+  "port": 8888,
+  "runtimePort": 8788,
+  "games": [
+    {
+      "id": "rune-foundry",
+      "webRoot": "dist/rune-foundry",
+      "runtimePath": "/rune-foundry",
+      "rooms": false,
+      "socket": false
+    },
+    {
+      "id": "lumen-weave",
+      "webRoot": "dist/lumen-weave",
+      "runtimePath": "/lumen-weave",
+      "rooms": false,
+      "socket": false
+    },
+    {
+      "id": "orbit-courier",
+      "webRoot": "dist/orbit-courier",
+      "runtimePath": "/orbit-courier",
+      "rooms": false,
+      "socket": false
+    },
+    {
+      "id": "mosslight",
+      "webRoot": "dist/mosslight",
+      "runtimePath": "/mosslight",
+      "rooms": false,
+      "socket": false
+    }
+  ],
+  "runtimeCommand": [
+    "target/release/myelin-atelier"
+  ],
+  "manifest": "games/atelier/Cargo.toml"
+}
