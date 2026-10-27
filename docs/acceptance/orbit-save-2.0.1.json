@@ -1,0 +1,52 @@
+{
+  "version": "2.0.1",
+  "rootCause": {
+    "reproducedOnPublicGateway": true,
+    "firstRejectedSave": 121,
+    "status": 429,
+    "message": "Please wait before trying again.",
+    "cause": "The live flush loop chased inputs arriving during each request, producing tiny save batches and exceeding the gateway limit of 120 actions per minute. Reconnect retried before the rate-limit window expired."
+  },
+  "changes": [
+    "Autosave commits one captured batch every 1.5 seconds; full draining is reserved for paused simulation.",
+    "HTTP 429 responses honor Retry-After, with a 60-second fallback for the existing gateway.",
+    "Pending inputs stay queued until acknowledged; backlog holds flight and resumes automatically."
+  ],
+  "validation": {
+    "unitTests": 21,
+    "preview": {
+      "seconds": 75,
+      "posts": 54,
+      "maxMinute": 42,
+      "pauses": 1,
+      "injected429": 1,
+      "replay": "Verified 10 signed frames.",
+      "meanBatch": 41.2962962962963
+    },
+    "production": {
+      "heldSafely": true,
+      "resumedAfterHold": true,
+      "maxPending": 150,
+      "seconds": 75,
+      "posts": 48,
+      "maxMinute": 42,
+      "pauses": 1,
+      "injected429": 1,
+      "replay": "Verified 5 signed frames.",
+      "meanBatch": 44.1875
+    },
+    "classicNativeSha256": "bf20228a36c25316cdaaec9add0450f27639522719ff7b32040eaf936e747b3d",
+    "expeditionNativeSha256": "29184cc74c8542548a39ec4db50277c8f3e68c651a2de5b9301ba17c8efa235a",
+    "nativeProfilesUnchanged": true
+  },
+  "deployment": {
+    "image": "myelin-atelier:orbit-save-2.0.1",
+    "imageId": "sha256:76e960d72661c50dccbffa6bec127db93ba1cd9daa5ccc2e16d0c68997d0e787",
+    "healthy": true,
+    "otherChangedContainers": [],
+    "backup": "/data/utxoplay/releases/20261027-orbit-save-2.0.1/atelier-data-before.tar.gz",
+    "compose": "/data/utxoplay/releases/20261027-orbit-save-2.0.1/game.compose.json",
+    "classicVerifierUnchanged": true,
+    "stagingRemoved": true
+  }
+}
