@@ -22,7 +22,9 @@
       "webRoot": "dist/orbit-courier",
       "runtimePath": "/orbit-courier",
       "rooms": false,
-      "socket": false
+      "socket": false,
+      "runtimePort": 8789,
+      "classic": true
     },
     {
       "id": "mosslight",
@@ -35,5 +37,15 @@
   "runtimeCommand": [
     "target/release/myelin-atelier"
   ],
-  "manifest": "games/atelier/Cargo.toml"
+  "manifest": "games/atelier/Cargo.toml",
+  "extraRuntimes": [
+    {
+      "id": "expedition",
+      "port": 8789,
+      "command": [
+        "target/release/myelin-orbit-expedition"
+      ],
+      "dataDirectory": "orbit-expedition-v2"
+    }
+  ]
 }

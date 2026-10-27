@@ -36,3 +36,13 @@ docker compose -f deploy/standalone-compose.yml up -d
 ```
 
 `deploy/runtime.env` supplies `RUNTIME_TOKEN` and `GAME_ORIGIN`; it is ignored by Git. Configure the store's service URL as `http://myelin-atelier:8080` on the private `utxoplay-games` network. Bind or proxy host port 8080 only when standalone public play is wanted. Mount existing native data instead of initializing a new game history. The deployment does not expose native runtime ports.
+
+## Orbit Courier: Expedition v2
+
+Orbit Courier now includes twelve delivery routes with freight, beacon-relay and rescue contracts; cargo/defence/phase modules; delivery streaks; forecast radiation and lane-switching patrols. The UI uses generated spacecraft and planetary artwork; original images and full generation prompts are in `assets/orbit-source/`.
+
+Expedition runs use a separate native executable, application profile and `DATA_DIR/orbit-expedition-v2` directory. **Do not move Classic saves into that directory.** `/games/orbit-courier/classic.html` continues the original game through `/games/orbit-courier/api/classic/*`. The original native engine and original profile inputs remain unchanged. The other three Atelier games retain their rules and save locations.
+
+Build both native executables with `npm run build:native` and `npm run build:native:orbit`, then `npm run build`. The host starts the original service on 8788 and Expedition on 8789, both private. Production `deploy/OrbitUpgrade.Dockerfile` inherits the exact original image to preserve its verifier. Allow sufficient memory and process capacity for both runtimes; the validated compose release uses 1 GiB and 512 processes.
+
+Validation: `npm test`, `npm run test:host`, `node tests/orbit-conformance.mjs`, `node tests/orbit-http.mjs`, `node tests/orbit-browser.mjs`. Set `STORE_URL` for browser/HTTP tests; default is the isolated local host on 19891. These tests create disposable guest runs. `tests/atelier-http.mjs` verifies all four original profiles, including Orbit Classic. Saved action retries reconcile the session head and predicted state before retrying, so lost commit responses cannot duplicate inputs.

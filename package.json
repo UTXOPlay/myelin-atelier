@@ -1,6 +1,6 @@
 {
   "name": "myelin-atelier-web",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,7 +8,8 @@
     "start": "node host/start.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:host": "node --test host/*.test.mjs",
-    "build:native": "cargo build --release --locked --manifest-path games/atelier/Cargo.toml --target-dir target"
+    "build:native": "cargo build --release --locked --manifest-path games/atelier/Cargo.toml --target-dir target",
+    "build:native:orbit": "cargo build --release --locked --manifest-path games/orbit-expedition/Cargo.toml --target-dir target"
   },
   "dependencies": {
     "express": "5.1.0",

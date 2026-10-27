@@ -6,11 +6,11 @@ import path from 'node:path';
 import {createGameHost} from './server.mjs';
 
 const token='test-runtime-token-'.repeat(3),origin='http://game.example';
-async function fixture(t){
+async function fixture(t,extra={}){
  const dir=mkdtempSync(path.join(tmpdir(),'game-host-test-'));
  writeFileSync(path.join(dir,'index.html'),'<h1>Independent game</h1>');
  const calls=[];
- const service=createGameHost({config:{name:'fixture',games:[{id:'example',webRoot:dir,runtimePath:'/native'}]},origin,runtimeUrl:'http://native.invalid',runtimeToken:token,fetchImpl:async(url,options)=>{calls.push({url,options});return Response.json({account:options.headers['X-UTXOPlay-Account']});}});
+ const service=createGameHost({config:{name:'fixture',games:[{id:'example',webRoot:dir,runtimePath:'/native',...extra}]},origin,runtimeUrl:'http://native.invalid',runtimeToken:token,fetchImpl:async(url,options)=>{calls.push({url,options});return Response.json({account:options.headers['X-UTXOPlay-Account']});}});
  const server=service.app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));
  const url='http://127.0.0.1:'+server.address().port;
  t.after(async()=>{service.close();await new Promise(r=>server.close(r));rmSync(dir,{recursive:true,force:true});});
@@ -38,3 +38,5 @@ test('trusted gateways bind the exact account; invalid credentials never fall ba
  assert.equal((await f.request('/games/example/api/unknown',undefined,jar)).status,404);
  const guest=await f.request('/games/example/api/guest',{},'',headers);assert.equal((await guest.json()).user.id,'c'.repeat(64));assert.equal(guest.headers.getSetCookie().length,0);
 });
+
+test('Expedition and Classic routes preserve their separate runtime and account binding',async t=>{const f=await fixture(t,{runtimePort:8789,classic:true}),jar=cookie(await f.request('/games/example/'));await f.request('/games/example/api/state',undefined,jar);await f.request('/games/example/api/classic/state',undefined,jar);assert.equal(f.calls[0].url,'http://127.0.0.1:8789/native/api/state');assert.equal(f.calls[1].url,'http://native.invalid/native/api/state');assert.equal(f.calls[0].options.headers['X-UTXOPlay-Account'],f.calls[1].options.headers['X-UTXOPlay-Account']);assert.equal((await f.request('/games/example/api/classic/unknown',undefined,jar)).status,404);});

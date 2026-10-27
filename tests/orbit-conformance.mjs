@@ -1,0 +1,3 @@
+import assert from'node:assert/strict';import{spawnSync}from'node:child_process';import{createGame,step}from'../games/orbit-courier/web/rules.mjs';
+const bin=process.env.ORBIT_BIN||'target/release/myelin-orbit-expedition';let ticks=0;
+for(let trial=0;trial<72;trial++){const game=createGame(),inputs=[];let seed=trial+1;for(let n=0;n<6000;n++){seed=seed*16807%2147483647;const i=game.awaiting?32<<(trial%3):trial<10?[0,1,2,4,8,16,31,3,5,10][trial]:seed%32;inputs.push(i);step(game,i)}const r=spawnSync(bin,['simulate'],{input:JSON.stringify({kind:'orbit-courier',inputs}),encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert.deepEqual(JSON.parse(r.stdout),game,'tape '+trial);ticks+=inputs.length;}console.log(JSON.stringify({tapes:72,ticks,matched:true}));

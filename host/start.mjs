@@ -7,7 +7,7 @@ const origin=process.env.GAME_ORIGIN||`http://127.0.0.1:${port}`;
 const runtimeUrl=process.env.RUNTIME_URL||`http://127.0.0.1:${runtimePort}`;
 const runtimeToken=process.env.RUNTIME_TOKEN;
 if(!runtimeToken||runtimeToken.length<32)throw Error('Set a stable RUNTIME_TOKEN of at least 32 characters.');
-let child,service,server,stopping=false;
+let child,service,server,stopping=false;const extraChildren=[];
 const install=config.plugin?(await import(new URL(config.plugin,import.meta.url))).install:undefined;
 service=createGameHost({config,origin,runtimeUrl,runtimeToken,sessionSecret:process.env.SESSION_SECRET||runtimeToken,install});
 server=service.app.listen(port,process.env.BIND||'127.0.0.1',()=>console.log(`${config.name}: ${origin}`));
@@ -18,6 +18,7 @@ if(!process.env.RUNTIME_URL){
  child.on('error',error=>{console.error(error);stop(1);});
  child.on('exit',code=>{if(!stopping)stop(code||1);});
 }
+for(const runtime of config.extraRuntimes||[]){const [command,...args]=runtime.command;const processChild=spawn(command,args,{stdio:'inherit',env:{...process.env,PORT:String(runtime.port),BIND:'127.0.0.1',DATA_DIR:(process.env.DATA_DIR||'data')+'/'+runtime.dataDirectory}});extraChildren.push(processChild);processChild.on('error',error=>{console.error(error);stop(1)});processChild.on('exit',code=>{if(!stopping)stop(code||1)});}
 server.on('error',error=>{console.error(error);stop(1);});
-function stop(code=0){if(stopping)return;stopping=true;child?.kill('SIGTERM');service?.close();server?.close(()=>process.exit(code));setTimeout(()=>{child?.kill('SIGKILL');process.exit(code);},3000).unref();}
+function stop(code=0){if(stopping)return;stopping=true;child?.kill('SIGTERM');for(const processChild of extraChildren)processChild.kill('SIGTERM');service?.close();server?.close(()=>process.exit(code));setTimeout(()=>{child?.kill('SIGKILL');for(const processChild of extraChildren)processChild.kill('SIGKILL');process.exit(code);},3000).unref();}
 for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>stop());

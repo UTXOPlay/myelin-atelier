@@ -1,0 +1,100 @@
+{
+  "release": "Orbit Courier Expedition 2.0.0",
+  "date": "2026-10-27",
+  "repository": "UTXOPlay/myelin-atelier",
+  "changes": [
+    "Recover transient save failures and lost commit acknowledgements without blindly repeating actions.",
+    "12-route campaign with freight, beacon relay and brake-assisted rescue contracts.",
+    "Three ship modules, full-load bonuses, delivery streaks, shield, phase drive, forecast solar sectors and lane-switching patrols.",
+    "Generated environment, spacecraft and planet assets; no particle overlays or screen shake.",
+    "Wide/full-viewport scene with circular geometry, safe-area controls and bounded 3.6-million-pixel backing.",
+    "Separate Expedition runtime/profile/data directory; Classic and the other original Atelier games retain original rules."
+  ],
+  "validation": {
+    "unitTests": 18,
+    "hostTests": 3,
+    "classicNativeBrowserTapes": 98,
+    "expeditionNativeBrowserTapes": 72,
+    "expeditionTicksCompared": 432000,
+    "fullCampaign": {
+      "ticks": 5416,
+      "score": 17232,
+      "won": true,
+      "replay": {
+        "authority": "02173f9ff5e7c30521249eb08791cbae91ec674e4a5e9194e797ca63382f286cb4",
+        "frames": 91,
+        "state_root": "58a6e9ec87abc84ae4b0c5449b0c23fb69449b7087340dc2b0599dda921bc8a0",
+        "verified": true
+      }
+    },
+    "nativeAndClassic": {
+      "nativeTicks": 361,
+      "profile": "414c9c3024ed82ad8a2cb2b73dff5785c3687fbea4549031ec552564aa0c5ea0",
+      "classicProfile": "18b8fad5c15f24afb12059ad7c1a1439867069d74f5f94e1c060e07fc1b84e08",
+      "newReplay": true,
+      "classicReplay": true,
+      "crossProfileRejected": true,
+      "independentSaves": true
+    },
+    "stageBrowser": [
+      "Transient request and lost commit response recovered during uninterrupted play",
+      "Six viewports, bounded backing, native input and replay verification passed",
+      "Real touch lane control acknowledged"
+    ],
+    "publicBrowser": [
+      "Transient request and lost commit response recovered during uninterrupted play",
+      "Six viewports, bounded backing, native input and replay verification passed",
+      "Real touch lane control acknowledged"
+    ],
+    "publicStoreLauncher": "Public store loader \u2192 Expedition play \u2192 Classic continuation passed",
+    "viewports": [
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3840,
+        2160
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "englishOnly": true
+  },
+  "art": {
+    "tool": "built-in image_gen",
+    "prompts": "assets/orbit-source/prompts.json",
+    "sources": "assets/orbit-source",
+    "webAssets": "games/orbit-courier/web/art",
+    "note": "Generated background 1672\u00d7941 and transparent sprite sources 1254\u00d71254; UI/geometry render at viewport resolution with bounded backing."
+  },
+  "deployment": {
+    "image": "myelin-atelier:orbit-expedition-2.0.0",
+    "imageId": "sha256:18eb97b98eebdf564ed5841a04dbc813279b757ef049f1e9b9aaefad4b5753ac",
+    "healthy": true,
+    "classicBinarySha256": "bf20228a36c25316cdaaec9add0450f27639522719ff7b32040eaf936e747b3d",
+    "expeditionBinarySha256": "29184cc74c8542548a39ec4db50277c8f3e68c651a2de5b9301ba17c8efa235a",
+    "backup": "/data/utxoplay/releases/20261027-orbit-expedition-2.0.0/atelier-data-before.tar.gz",
+    "compose": "/data/utxoplay/releases/20261027-orbit-expedition-2.0.0/game.compose.json",
+    "otherChangedContainers": [],
+    "stagingRemoved": true
+  },
+  "limitations": [
+    "Automated pilot completion is not a substitute for human difficulty testing.",
+    "Mobile browser emulation does not establish real-device frame rates."
+  ]
+}

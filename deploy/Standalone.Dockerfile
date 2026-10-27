@@ -3,7 +3,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends clang libclang-
 WORKDIR /src
 COPY games ./games
 COPY tests ./tests
-RUN cargo build --release --locked --manifest-path games/atelier/Cargo.toml --target-dir target
+RUN cargo build --release --locked --manifest-path games/atelier/Cargo.toml --target-dir target && cargo build --release --locked --manifest-path games/orbit-expedition/Cargo.toml --target-dir target
 FROM node:22-bookworm-slim AS web
 WORKDIR /src
 COPY package.json package-lock.json ./
@@ -19,6 +19,7 @@ COPY --from=web /src/dist ./dist
 COPY host ./host
 COPY game-host.json ./game-host.json
 COPY --from=native /src/target/release/myelin-atelier ./target/release/myelin-atelier
+COPY --from=native /src/target/release/myelin-orbit-expedition ./target/release/myelin-orbit-expedition
 RUN mkdir /app/data && chown node:node /app/data
 USER node
 ENV NODE_ENV=production BIND=0.0.0.0 WEB_PORT=8080 DATA_DIR=/app/data
